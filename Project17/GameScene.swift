@@ -56,6 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gameTimer?.invalidate()
             enemyTimer -= Int(0.1)
             gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(enemyTimer), target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+            enemyCount = 20
         } else {
             gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
         }
