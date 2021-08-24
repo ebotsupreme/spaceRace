@@ -87,6 +87,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if !isGameOver {
                 score += 1
+            } else {
+                gameTimer?.invalidate()
             }
         }
     }
