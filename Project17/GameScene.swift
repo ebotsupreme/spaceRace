@@ -24,6 +24,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var enemyCount = 20
+    var enemyTimer = 1
+    
     override func didMove(to view: SKView) {
         backgroundColor = .black
         
@@ -49,7 +52,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        if enemyCount == 0 {
+            gameTimer?.invalidate()
+            enemyTimer -= Int(0.1)
+            gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(enemyTimer), target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        } else {
+            gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        }
     }
     
     @objc func createEnemy() {
@@ -58,6 +67,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sprite = SKSpriteNode(imageNamed: enemy)
         sprite.position = CGPoint(x: 1200, y: Int.random(in: 50...736))
         addChild(sprite)
+        
+        enemyCount -= 1
         
         sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         sprite.physicsBody?.categoryBitMask = 1
@@ -82,7 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         
-        if isPlayerTouched != nil {
+        if isPlayerTouched != nil && isPlayerTouched == true {
             var location = touch.location(in: self)
             if location.y < 100 {
                 location.y = 100
